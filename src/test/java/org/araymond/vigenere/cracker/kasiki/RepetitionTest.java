@@ -13,10 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RepetitionTest {
 
     @Test
-    public void shouldComputeSimpleCommonsDivisors() {
-        final Repetition repetition = new Repetition("abc", newArrayList(3, 12, 45, 26, 500, 20));
+    public void shouldCalculateDistances() {
+        final Repetition repetition = new Repetition("abc", newArrayList(3, 12, 25, 13));
 
-        assertThat(repetition.getCommonDivisors()).isEqualTo(Lists.newArrayList(3, 3, 3, 2, 2, 4, 2, 4, 5, 5, 2, 2, 2, 4, 5, 10, 20));
+        assertThat(repetition.getDistances()).containsOnly(9, 10, 22, 1, 13, 12);
     }
 
 }

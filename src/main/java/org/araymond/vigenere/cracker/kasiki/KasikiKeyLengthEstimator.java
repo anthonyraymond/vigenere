@@ -2,6 +2,7 @@ package org.araymond.vigenere.cracker.kasiki;
 
 import org.araymond.vigenere.cracker.KeyLength;
 import org.araymond.vigenere.cracker.KeyLengthEstimator;
+import org.araymond.vigenere.cracker.utils.CommonDivisors;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -11,6 +12,8 @@ import java.util.stream.Collectors;
  * Created by raymo on 22/11/2016.
  */
 public class KasikiKeyLengthEstimator implements KeyLengthEstimator {
+
+    private final CommonDivisors commonDivisorsUtils = new CommonDivisors();
 
     /**
      * Estimate the probable length of the key (based on common divisors of the distance between words) using kasiki method
@@ -22,24 +25,27 @@ public class KasikiKeyLengthEstimator implements KeyLengthEstimator {
     public List<KeyLength> estimate(final String encoded) {
         Collection<Repetition> repetitions = new ArrayList<>();
         try {
-            // We are getting commons divisors for each repetitions
-            repetitions = new RepetitionCounter().count(encoded);
+            // We are getting going to get repetitions in the text
+            repetitions = new MultithreadedRepetitionCounter().count(encoded);
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
 
+        // We find all commons divisors for all the distances between repetitions
+        //   ask not to find divisors greater than 65, because we assume the key won't be more than 65 characters long
+        final List<Integer> commonsDivisors = commonDivisorsUtils.findFor(
+                repetitions.stream()
+                        .flatMap(rep -> rep.getDistances().stream())
+                        .collect(Collectors.toList()),
+                new CommonDivisors.CommonDivisorLimit(65)
+        );
+
         // with this commons divisors, we create a list of KeyLength, which correspond to probables key's length.
-        // Then we sort the map and keep only first five best match
-        // Remarks : we get the divisor 2 out of the field, i do'nt think someone would ever pick a 2 characters key.
-        final List<KeyLength> keyLengths = repetitions
-                .stream()
-                .flatMap(r -> r.getCommonDivisors().stream())
+        // Remarks : we get the divisor 2 out of the field, i don't think someone would ever pick a 2 characters key.
+        final List<KeyLength> keyLengths = commonsDivisors.stream()
                 .filter(divisor -> divisor > 2)
                 .collect(Collectors.groupingBy(divisor -> divisor, Collectors.counting()))
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.<Integer, Long>comparingByValue().reversed())
-                .limit(5)
+                .entrySet().stream()
                 .map(entry -> new KeyLength(entry.getKey(), entry.getValue().intValue()))
                 .collect(Collectors.toList());
 
@@ -51,10 +57,11 @@ public class KasikiKeyLengthEstimator implements KeyLengthEstimator {
                 .average()
                 .orElse(1);
 
-        // Finaly, we exclude non revelant entries from the list. (ie: [15, 14, 12, 6] 6 will be excluded because it is a lot above the rest
+        // Finaly, we exclude non revelant entries from the list. (ie: [15, 14, 12, 2] 2 will be excluded because it is a lot above the rest
         return keyLengths
                 .stream()
-                .filter(keyLength -> keyLength.getOccurence() > averageOccurenceValue * 0.8)
+                .sorted(Comparator.comparingInt(KeyLength::getOccurence))
+                .filter(keyLength -> keyLength.getOccurence() > averageOccurenceValue * 0.6)
                 .collect(Collectors.toList());
     }
 

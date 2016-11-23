@@ -6,7 +6,7 @@ import java.util.concurrent.*;
 /**
  * Created by raymo on 22/11/2016.
  */
-public class RepetitionCounter {
+public class MultithreadedRepetitionCounter {
 
     /**
      * Count all the substring repetitions in the text.
@@ -69,7 +69,7 @@ public class RepetitionCounter {
         @Override
         public Map<String, Repetition> call() throws Exception {
             // Try to find all repetition of 3 or more character into the string (start to 3 and end at 10 inclusive)
-            for (int letterCount = 3; startIndex + letterCount < fullText.length() && letterCount < 7 ; ++letterCount) {
+            for (int letterCount = 3; startIndex + letterCount < fullText.length() && letterCount < 5 ; ++letterCount) {
                 final String lookfor = fullText.substring(startIndex, startIndex + letterCount);
                 int lastIndex = startIndex;
                 final List<Integer> positions = new ArrayList<>();

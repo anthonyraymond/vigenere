@@ -1,6 +1,7 @@
 package org.araymond.vigenere.cracker.kasiki;
 
 import org.araymond.vigenere.VigenereCipher;
+import org.araymond.vigenere.cracker.KeyLengthEstimator;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -10,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class KasikiKeyLengthEstimatorTest {
 
-    private final KasikiKeyLengthEstimator estimator = new KasikiKeyLengthEstimator();
+    private final KeyLengthEstimator estimator = new KasikiKeyLengthEstimator();
     private final VigenereCipher vigenere = new VigenereCipher();
 
     @Test
@@ -33,7 +34,7 @@ public class KasikiKeyLengthEstimatorTest {
         final String key = "rhonin";
 
         final String encoded = vigenere.cypher(longStory, key);
-        assertThat(estimator.estimate(encoded)).extracting("length").contains(6);
+        assertThat(estimator.estimate(encoded)).extracting("length").contains(key.length());
     }
 
     @Test
@@ -42,7 +43,7 @@ public class KasikiKeyLengthEstimatorTest {
         final String key = "rhonin";
 
         final String encoded = vigenere.cypher(longStory, key);
-        assertThat(estimator.estimate(encoded)).extracting("length").contains(6);
+        assertThat(estimator.estimate(encoded)).extracting("length").contains(key.length());
     }
 
 }

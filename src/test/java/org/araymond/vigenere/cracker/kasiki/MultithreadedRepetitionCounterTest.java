@@ -11,9 +11,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created by raymo on 22/11/2016.
  */
-public class RepetitionCounterTest {
+public class MultithreadedRepetitionCounterTest {
 
-    private final RepetitionCounter counter = new RepetitionCounter();
+    private final MultithreadedRepetitionCounter counter = new MultithreadedRepetitionCounter();
 
     @Test
     public void shouldFindRepetitionInSimpleText() throws ExecutionException, InterruptedException {
