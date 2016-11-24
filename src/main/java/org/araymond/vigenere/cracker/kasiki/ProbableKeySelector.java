@@ -26,12 +26,12 @@ public class ProbableKeySelector {
         }
         final List<KeyLength> mostProbableKeys = this.deduplicateDivisors(probableKey);
 
-        Collections.sort(mostProbableKeys, Comparator.comparingInt(KeyLength::getOccurence).reversed());
+        Collections.sort(mostProbableKeys, Comparator.comparingInt(KeyLength::getOccurrence).reversed());
         final ListIterator<KeyLength> it = mostProbableKeys.listIterator();
         KeyLength current = it.next();
         while (it.hasNext()) {
             final KeyLength next = it.next();
-            if (next.getOccurence() < current.getOccurence() / 2 || next.getOccurence() < mostProbableKeys.get(0).getOccurence() / 3) {
+            if (next.getOccurrence() < current.getOccurrence() / 2 || next.getOccurrence() < mostProbableKeys.get(0).getOccurrence() / 3) {
                 it.remove();
                 it.previous();
             }
@@ -63,7 +63,7 @@ public class ProbableKeySelector {
      */
     List<KeyLength> deduplicateDivisors(final List<KeyLength> keyLengths) {
         final List<KeyLength> mostProbableKeys = Lists.newArrayList();
-        keyLengths.forEach(pk -> mostProbableKeys.add(new KeyLength(pk.getLength(), pk.getOccurence())));
+        keyLengths.forEach(pk -> mostProbableKeys.add(new KeyLength(pk.getLength(), pk.getOccurrence())));
         Collections.sort(mostProbableKeys, Comparator.comparingInt(KeyLength::getLength));
 
         for (int i = 0; i < mostProbableKeys.size(); ++i) {
@@ -71,7 +71,7 @@ public class ProbableKeySelector {
                 final KeyLength smallerLength = mostProbableKeys.get(i);
                 final KeyLength greaterLength = mostProbableKeys.get(j);
                 if (greaterLength.getLength() % smallerLength.getLength() == 0) {
-                    smallerLength.setOccurence(smallerLength.getOccurence() - greaterLength.getOccurence());
+                    smallerLength.setOccurrence(smallerLength.getOccurrence() - greaterLength.getOccurrence());
                 }
             }
         }

@@ -6,7 +6,6 @@ import org.araymond.vigenere.cracker.KeyLengthEstimator;
 import org.araymond.vigenere.cracker.friedman.FriendmanKeyLengthEstimator;
 import org.araymond.vigenere.cracker.kasiki.KasikiKeyLengthEstimator;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -80,9 +79,9 @@ public class App {
         out.println("Possibles key lengths are :");
         out.println("    For Babbage and kasiki:");
         final List<KeyLength> kasiskiKeys = kasikiEstimator.estimate(args[1]);
-        Collections.sort(kasiskiKeys, Comparator.comparingInt(KeyLength::getOccurence).reversed());
+        Collections.sort(kasiskiKeys, Comparator.comparingInt(KeyLength::getOccurrence).reversed());
         for (final KeyLength keyLength : kasiskiKeys) {
-            final String toPrint = String.format("        - Key length: %2s  Occurences: %s", keyLength.getLength(), keyLength.getOccurence());
+            final String toPrint = String.format("        - Key length: %2s  Occurences: %s", keyLength.getLength(), keyLength.getOccurrence());
             out.println(toPrint);
         }
 
