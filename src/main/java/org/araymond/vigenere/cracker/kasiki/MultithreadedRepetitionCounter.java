@@ -32,12 +32,23 @@ public class MultithreadedRepetitionCounter {
             );
         }
 
-        final Map<String, Repetition> repetitions = new HashMap<>();
+        final Map<String, Repetition> repetitions = new ConcurrentHashMap<>();
         // As soon as the thread is over, we get the result and merge the maps into the main one.
         for (final Future<Map<String, Repetition>> future : futures) {
             // When a thread completes we merge his results to the main Map
-            future.get().forEach(repetitions::putIfAbsent);
+            future.get().forEach((key, value) -> {
+                    repetitions.compute(
+                            key,
+                            (s, oldValue) -> {
+                                if (oldValue != null && oldValue.getDistances().size() > value.getDistances().size()){
+                                    return oldValue;
+                                }
+                                return value;
+                            }
+                    );
+            });
         }
+
         return repetitions.values();
     }
 
@@ -69,9 +80,9 @@ public class MultithreadedRepetitionCounter {
         @Override
         public Map<String, Repetition> call() throws Exception {
             // Try to find all repetition of 3 or more character into the string (start to 3 and end at 10 inclusive)
-            for (int letterCount = 3; startIndex + letterCount < fullText.length() && letterCount < 5 ; ++letterCount) {
+            for (Integer letterCount = 3; startIndex + letterCount < fullText.length() && letterCount < 5 ; ++letterCount) {
                 final String lookfor = fullText.substring(startIndex, startIndex + letterCount);
-                int lastIndex = startIndex;
+                Integer lastIndex = startIndex;
                 final List<Integer> positions = new ArrayList<>();
 
                 while(lastIndex != -1) {
