@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  */
 public class KasikiKeyLengthEstimator implements KeyLengthEstimator {
 
-    private final CommonDivisors.CommonDivisorLimit maxDivisor = new CommonDivisors.CommonDivisorLimit(65);
+    private final CommonDivisors.CommonDivisorLimit maxDivisor = new CommonDivisors.CommonDivisorLimit(20);
     private final CommonDivisors commonDivisorsUtils = new CommonDivisors(maxDivisor);
     private final ProbableKeySelector selector = new ProbableKeySelector();
 

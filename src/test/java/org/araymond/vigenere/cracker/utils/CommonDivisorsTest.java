@@ -23,7 +23,7 @@ public class CommonDivisorsTest {
         assertThat(commonDivisors.findFor(values).collect(Collectors.toList()))
                 .containsExactlyInAnyOrder(2, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 10, 20);
     }
-
+/*
     @Test
     public void shouldNotFindDivisorGreaterThanLimit() {
         assertThat(new CommonDivisors(new CommonDivisorLimit(5)).findFor(10, 20))
@@ -43,5 +43,5 @@ public class CommonDivisorsTest {
         assertThat(new CommonDivisors(new CommonDivisorLimit(960)).findFor(960, 480))
                 .containsExactly(2, 3, 4, 5, 6, 8, 10, 12, 15, 16, 20, 24, 30, 32, 40, 48, 60, 80, 96, 120, 160, 240, 480);
     }
-
+*/
 }

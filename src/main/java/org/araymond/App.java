@@ -3,7 +3,7 @@ package org.araymond;
 import org.araymond.vigenere.VigenereCipher;
 import org.araymond.vigenere.cracker.KeyLength;
 import org.araymond.vigenere.cracker.KeyLengthEstimator;
-import org.araymond.vigenere.cracker.friedman.FriendmanKeyLengthEstimator;
+import org.araymond.vigenere.cracker.friedman.FriedmanKeyLengthEstimator;
 import org.araymond.vigenere.cracker.kasiki.KasikiKeyLengthEstimator;
 
 import java.util.Collections;
@@ -85,7 +85,7 @@ public class App {
             out.println(toPrint);
         }
 
-        final KeyLengthEstimator friedmanEstimator = new FriendmanKeyLengthEstimator();
+        final KeyLengthEstimator friedmanEstimator = new FriedmanKeyLengthEstimator();
         out.println("    For Friedman test:");
         out.println("        - Key length : " + friedmanEstimator.estimate(args[1]).get(0).getLength());
     }
