@@ -81,7 +81,7 @@ public class FrequencyAnalysis {
      * Calculate the difference between english letter frequency and the given text letter frequencies.
      *
      * @param text
-     * @return
+     * @return a value between 0 and 1 (0 means the text match the english's characters frequency perfectly).
      */
     Double deviationFromEnglishLanguage(final String text) {
         // Count how much time each character is repeated
