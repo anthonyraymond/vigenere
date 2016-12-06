@@ -3,7 +3,8 @@ package org.araymond.vigenere.cracker.friedman;
 import org.araymond.vigenere.cracker.KeyLength;
 import org.araymond.vigenere.cracker.KeyLengthEstimator;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -33,10 +34,9 @@ public class FriedmanKeyLengthEstimator implements KeyLengthEstimator {
      * <br>
      * This is what this function is about, we are going to try keys up to 6 characters longer than the initial key.
      *
-     *
-     * @param initialIndexOfCoincidence     index of coincidence to improve.
-     * @param initialLength                 length of the key before improvements.
-     * @param encoded                       vigenere encoded text
+     * @param initialIndexOfCoincidence index of coincidence to improve.
+     * @param initialLength             length of the key before improvements.
+     * @param encoded                   vigenere encoded text
      * @return improved or not (but most likely improved Length of the vigenere key.
      */
     private Integer improveLengthApproximation(final Double initialIndexOfCoincidence, final Integer initialLength, final CharSequence encoded) {
@@ -65,16 +65,17 @@ public class FriedmanKeyLengthEstimator implements KeyLengthEstimator {
     /**
      * Calculate the length of the key (using Friedman method) from an index of coincidence.
      *
-     * @param indexOfCoincidence    index of coincidence.
+     * @param indexOfCoincidence index of coincidence.
      * @return the length of the vigenere key.
      */
     private Integer computeLengthFromIndexOfCoincidence(final Double indexOfCoincidence) {
-        return (int) Math.floor((0.067D - 0.0385D)/(indexOfCoincidence - 0.0385D));
+        return (int) Math.floor((0.067D - 0.0385D) / (indexOfCoincidence - 0.0385D));
     }
+
     /**
      * Calculate the index of coincidence of a text.
      *
-     * @param text  text to compute the index of coincidence from.
+     * @param text text to compute the index of coincidence from.
      * @return the index of coincidence of the text.
      */
     private Double computeIndexOfCoincidence(final String text) {
@@ -83,9 +84,8 @@ public class FriedmanKeyLengthEstimator implements KeyLengthEstimator {
                 .mapToInt(letterCount -> letterCount.intValue() * (letterCount.intValue() - 1))
                 .sum();
 
-        return incidenceOfCoincidence / ((text.length() * (text.length() - 1D)));
+        return incidenceOfCoincidence / (text.length() * (text.length() - 1D));
     }
-
 
 
 }

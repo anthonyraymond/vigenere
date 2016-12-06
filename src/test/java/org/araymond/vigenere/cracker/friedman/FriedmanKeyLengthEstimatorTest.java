@@ -1,6 +1,7 @@
 package org.araymond.vigenere.cracker.friedman;
 
 import org.araymond.vigenere.VigenereCipher;
+import org.araymond.vigenere.cracker.KeyLengthEstimator;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FriedmanKeyLengthEstimatorTest {
 
     private final VigenereCipher vigenere = new VigenereCipher();
-    private final FriedmanKeyLengthEstimator estimator = new FriedmanKeyLengthEstimator();
+    private final KeyLengthEstimator estimator = new FriedmanKeyLengthEstimator();
 
     @Test
     public void shouldEstimateKeyLength() {
