@@ -1,8 +1,8 @@
 package org.araymond;
 
 import org.araymond.vigenere.VigenereCipher;
-import org.araymond.vigenere.VigenereStringUtils;
-import org.araymond.vigenere.cracker.FrequencyAnalysis;
+import org.araymond.vigenere.cracker.utils.VigenereStringUtils;
+import org.araymond.vigenere.cracker.frequency.FrequencyAnalysis;
 import org.araymond.vigenere.cracker.KeyLength;
 import org.araymond.vigenere.cracker.KeyLengthEstimator;
 import org.araymond.vigenere.cracker.friedman.FriedmanKeyLengthEstimator;
@@ -24,8 +24,8 @@ public class App {
 
     private static final KeyLengthEstimator kasiskiEstimator = new KasikiKeyLengthEstimator();
     private static final KeyLengthEstimator friedmanEstimator = new FriedmanKeyLengthEstimator();
-    private static FrequencyAnalysis frequencyAnalysis = new FrequencyAnalysis();
-    private static VigenereCipher vigenere = new VigenereCipher();
+    private static final FrequencyAnalysis frequencyAnalysis = new FrequencyAnalysis();
+    private static final VigenereCipher vigenere = new VigenereCipher();
 
     public static void main(final String[] args) {
         if (args.length < 1) {
@@ -131,7 +131,7 @@ public class App {
         final String encoded = VigenereStringUtils.normalizePlainText(args[1]);
 
         out.println("Possible keys can be :");
-        List<String> possibleKeys = Stream.concat(
+        final List<String> possibleKeys = Stream.concat(
                 kasiskiEstimator.estimate(encoded).stream(),
                 friedmanEstimator.estimate(encoded).stream()
         )

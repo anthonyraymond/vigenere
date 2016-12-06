@@ -1,6 +1,6 @@
-package org.araymond.vigenere;
+package org.araymond.vigenere.cracker.utils;
 
-import org.araymond.vigenere.VigenereStringUtils;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -14,11 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class VigenereStringUtilsTest {
 
-    private final VigenereStringUtils utils = new VigenereStringUtils();
     @Test
     public void shouldNormalizeText() {
         final String withSpace = "  hello i got some spaces  ";
-        assertThat(VigenereStringUtils.normalizePlainText(withSpace)).isEqualTo("helloigotsomespaces");
+        Assertions.assertThat(VigenereStringUtils.normalizePlainText(withSpace)).isEqualTo("helloigotsomespaces");
 
         final String withCapitalCase = "I GOT SoMe capital Cases";
         assertThat(VigenereStringUtils.normalizePlainText(withCapitalCase)).isEqualTo("igotsomecapitalcases");
@@ -31,7 +30,7 @@ public class VigenereStringUtilsTest {
     public void shouldCountSingleCharRepetition() {
         final String text = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz";
 
-        final Map<String, Long> counted = utils.countSingleCharRepetition(text);
+        final Map<String, Long> counted = VigenereStringUtils.countRepetitionByCharacters(text);
 
         assertThat(counted).hasSize(26);
         assertThat(counted.values().stream().distinct().collect(Collectors.toList())).containsOnly(2L);
@@ -39,7 +38,7 @@ public class VigenereStringUtilsTest {
 
     @Test
     public void shouldCountSingleCharRepetition2() {
-        final Map<String, Long> charCount = utils.countSingleCharRepetition("abcdefghijklmnopqrstuvwxyzaaanqq");
+        final Map<String, Long> charCount = VigenereStringUtils.countRepetitionByCharacters("abcdefghijklmnopqrstuvwxyzaaanqq");
         final Map<String, Long> expected = new HashMap<>();
         for (char c = 'a'; c <= 'z'; ++c) {
             expected.put(c + "", 1L);
@@ -55,14 +54,14 @@ public class VigenereStringUtilsTest {
     public void shouldRemoveCharactersBetweenGap() {
         final String text = "abcdefghijklmnopqr";
 
-        assertThat(utils.removeCharactersBetweenGap(4, 0, text)).isEqualTo("aeimq");
+        assertThat(VigenereStringUtils.peekAndLeap(4, 0, text)).isEqualTo("aeimq");
     }
 
     @Test
     public void shouldRemoveCharactersBetweenGapWithStartAt() {
         final String text = "abcdefghijklmnopqr";
 
-        assertThat(utils.removeCharactersBetweenGap(4, 1, text)).isEqualTo("bfjnr");
+        assertThat(VigenereStringUtils.peekAndLeap(4, 1, text)).isEqualTo("bfjnr");
     }
 
 }

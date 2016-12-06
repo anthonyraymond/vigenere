@@ -1,7 +1,7 @@
-package org.araymond.vigenere.cracker;
+package org.araymond.vigenere.cracker.frequency;
 
 import org.araymond.vigenere.VigenereCipher;
-import org.junit.Ignore;
+import org.araymond.vigenere.cracker.frequency.FrequencyAnalysis;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

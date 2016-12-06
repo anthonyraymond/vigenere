@@ -1,4 +1,4 @@
-package org.araymond.vigenere;
+package org.araymond.vigenere.cracker.utils;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -23,13 +23,13 @@ public class VigenereStringUtils {
     }
 
     /**
-     * Count how much time each characters occurs.
+     * Count how much time each characters occurs in a text.
      *
      * @param text
      * @return
      */
-    public Map<String, Long> countSingleCharRepetition(final String text) {
-        return Arrays.stream(text.toLowerCase().split(""))
+    public static Map<String, Long> countRepetitionByCharacters(final String text) {
+        return Arrays.stream(text.split(""))
                 .filter(c -> !c.isEmpty())
                 .collect(Collectors.groupingBy(c -> c, Collectors.counting()));
     }
@@ -50,7 +50,7 @@ public class VigenereStringUtils {
      * @param text      The text to pick characters from.
      * @return a String composed of one characters every {@code gap} present into {@code text}
      */
-    public String removeCharactersBetweenGap(final int gap, final int startAt, final CharSequence text) {
+    public static String peekAndLeap(final int gap, final int startAt, final CharSequence text) {
         final StringBuilder sb = new StringBuilder();
         for (int stringIndex = startAt; stringIndex < text.length(); stringIndex += gap) {
             sb.append(text.charAt(stringIndex));

@@ -1,6 +1,6 @@
 package org.araymond.vigenere.cracker.friedman;
 
-import org.araymond.vigenere.VigenereStringUtils;
+import org.araymond.vigenere.cracker.utils.VigenereStringUtils;
 import org.araymond.vigenere.cracker.KeyLength;
 import org.araymond.vigenere.cracker.KeyLengthEstimator;
 
@@ -13,8 +13,6 @@ import java.util.stream.IntStream;
  * Created by raymo on 23/11/2016.
  */
 public class FriedmanKeyLengthEstimator implements KeyLengthEstimator {
-
-    private final VigenereStringUtils utils = new VigenereStringUtils();
 
     @Override
     public List<KeyLength> estimate(final String encoded) {
@@ -49,7 +47,7 @@ public class FriedmanKeyLengthEstimator implements KeyLengthEstimator {
 
             // Since we want to work on column, <e are gong to simulate the "matrix" by picking one character out of X characters in string.
             final Double currentIndexOfCoincidence = IntStream.rangeClosed(0, numberOfSplits)
-                    .mapToObj(shift -> utils.removeCharactersBetweenGap(numberOfSplits, shift, encoded))
+                    .mapToObj(shift -> VigenereStringUtils.peekAndLeap(numberOfSplits, shift, encoded))
                     // Then we get the index of coincidence of each "column" to calculate the average value.
                     .map(this::computeIndexOfCoincidence)
                     .collect(Collectors.averagingDouble(d -> d));
@@ -80,7 +78,7 @@ public class FriedmanKeyLengthEstimator implements KeyLengthEstimator {
      * @return the index of coincidence of the text.
      */
     private Double computeIndexOfCoincidence(final String text) {
-        final double incidenceOfCoincidence = utils.countSingleCharRepetition(text)
+        final double incidenceOfCoincidence = VigenereStringUtils.countRepetitionByCharacters(text)
                 .values().stream()
                 .mapToInt(letterCount -> letterCount.intValue() * (letterCount.intValue() - 1))
                 .sum();

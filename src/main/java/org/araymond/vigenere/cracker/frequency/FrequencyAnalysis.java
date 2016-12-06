@@ -1,15 +1,12 @@
-package org.araymond.vigenere.cracker;
+package org.araymond.vigenere.cracker.frequency;
 
 import com.google.common.collect.Maps;
 import org.araymond.vigenere.VigenereCipher;
-import org.araymond.vigenere.VigenereStringUtils;
+import org.araymond.vigenere.cracker.utils.VigenereStringUtils;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -17,9 +14,7 @@ import java.util.stream.IntStream;
  */
 public class FrequencyAnalysis {
 
-    private final VigenereStringUtils utils = new VigenereStringUtils();
     private final VigenereCipher vigenere = new VigenereCipher();
-    private final BigDecimal hundred = new BigDecimal("100");
 
     private static final Map<String, Double> englishFrequency = new HashMap<>(26);
     static {
@@ -53,7 +48,7 @@ public class FrequencyAnalysis {
 
     public String breakKey(final CharSequence cypher, final Integer keyLength) {
         return IntStream.range(0, keyLength)
-                .mapToObj(shift -> utils.removeCharactersBetweenGap(keyLength, shift, cypher))
+                .mapToObj(shift -> VigenereStringUtils.peekAndLeap(keyLength, shift, cypher))
                 .map(this::findBestShiftToMatchEnglishFrequency)
                 .map(Map.Entry::getKey)
                 .reduce((i, j) -> String.join("", i, j))
@@ -89,10 +84,8 @@ public class FrequencyAnalysis {
      * @return
      */
     Double deviationFromEnglishLanguage(final String text) {
-        // Count how much time each character si repeting
-        final Map<String, Long> textFrequencies = Arrays.stream(text.split(""))
-                .filter(c -> !c.isEmpty())
-                .collect(Collectors.groupingBy(c -> c, Collectors.counting()));
+        // Count how much time each character is repeated
+        final Map<String, Long> textFrequencies = VigenereStringUtils.countRepetitionByCharacters(text);
 
         // If a character was missing from the table, add it with 0 occurrences.
         for (char c = 'a'; c <= 'z'; ++c) {

@@ -1,5 +1,7 @@
 package org.araymond.vigenere;
 
+import org.araymond.vigenere.cracker.utils.VigenereStringUtils;
+
 /**
  * Created by raymo on 22/11/2016.
  */
