@@ -1,14 +1,10 @@
 package org.araymond.vigenere.cracker.utils;
 
-import com.google.common.collect.Lists;
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * Created by raymo on 23/11/2016.

@@ -1,5 +1,6 @@
 package org.araymond.vigenere.cracker.friedman;
 
+import org.araymond.vigenere.VigenereStringUtils;
 import org.araymond.vigenere.cracker.KeyLength;
 import org.araymond.vigenere.cracker.KeyLengthEstimator;
 
@@ -13,7 +14,7 @@ import java.util.stream.IntStream;
  */
 public class FriedmanKeyLengthEstimator implements KeyLengthEstimator {
 
-    private final FriedmanStringUtils utils = new FriedmanStringUtils();
+    private final VigenereStringUtils utils = new VigenereStringUtils();
 
     @Override
     public List<KeyLength> estimate(final String encoded) {

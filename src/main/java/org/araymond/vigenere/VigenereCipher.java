@@ -6,19 +6,6 @@ package org.araymond.vigenere;
 public class VigenereCipher {
 
     /**
-     * Take a string as a parameter and :
-     *  - Remove spaces.
-     *  - Remove all non alphabetical charaters.
-     *  - Lowercase all characters.
-     *
-     * @param plaintText a String that may contains unwanted chars
-     * @return A String without all unwanted characters
-     */
-    String normalizePlainText(final String plaintText) {
-        return plaintText.replaceAll("[^A-Za-z]+", "").toLowerCase();
-    }
-
-    /**
      * Take a String as parameter and return the ascii representation of the String (as a int array)
      *
      * @param key String to be converted to ASCII value array
@@ -62,8 +49,8 @@ public class VigenereCipher {
             return plaintText;
         }
         // Remove unwanted char from both plaintText and key
-        plaintText = this.normalizePlainText(plaintText);
-        key = this.normalizePlainText(key);
+        plaintText = VigenereStringUtils.normalizePlainText(plaintText);
+        key = VigenereStringUtils.normalizePlainText(key);
         // Get the ascii value of the key's chars, instead of the string
         final int[] keyValue = computeKeyAsNumericalValue(key);
 
@@ -89,8 +76,8 @@ public class VigenereCipher {
             return encoded;
         }
         // Remove unwanted char from both plaintText and key
-        encoded = normalizePlainText(encoded);
-        key = normalizePlainText(key);
+        encoded = VigenereStringUtils.normalizePlainText(encoded);
+        key = VigenereStringUtils.normalizePlainText(key);
 
         // Get the ascii value of the key's chars, instead of the string
         final int[] keyValue = computeKeyAsNumericalValue(key);

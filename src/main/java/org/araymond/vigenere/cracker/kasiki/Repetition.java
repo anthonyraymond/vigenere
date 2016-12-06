@@ -2,8 +2,9 @@ package org.araymond.vigenere.cracker.kasiki;
 
 import com.google.common.base.Objects;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by raymo on 22/11/2016.

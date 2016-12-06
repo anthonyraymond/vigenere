@@ -12,18 +12,6 @@ public class VigenereCipherTest {
     private final VigenereCipher vigenere = new VigenereCipher();
 
     @Test
-    public void shouldNormalizeText() {
-        final String withSpace = "  hello i got some spaces  ";
-        assertThat(vigenere.normalizePlainText(withSpace)).isEqualTo("helloigotsomespaces");
-
-        final String withCapitalCase = "I GOT SoMe capital Cases";
-        assertThat(vigenere.normalizePlainText(withCapitalCase)).isEqualTo("igotsomecapitalcases");
-
-        final String withSpecialChar = "There !! is 'ééâ some ) special* /- 133 char here";
-        assertThat(vigenere.normalizePlainText(withSpecialChar)).isEqualTo("thereissomespecialcharhere");
-    }
-
-    @Test
     public void shouldComputeSimpleKeyAsNumericalValue() {
         assertThat(vigenere.computeKeyAsNumericalValue("abc")).isEqualTo(new int[]{97, 98, 99});
     }

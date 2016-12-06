@@ -1,5 +1,6 @@
-package org.araymond.vigenere.cracker.friedman;
+package org.araymond.vigenere;
 
+import org.araymond.vigenere.VigenereStringUtils;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -11,9 +12,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created by raymo on 26/11/2016.
  */
-public class FriedmanStringUtilsTest {
+public class VigenereStringUtilsTest {
 
-    private final FriedmanStringUtils utils = new FriedmanStringUtils();
+    private final VigenereStringUtils utils = new VigenereStringUtils();
+    @Test
+    public void shouldNormalizeText() {
+        final String withSpace = "  hello i got some spaces  ";
+        assertThat(VigenereStringUtils.normalizePlainText(withSpace)).isEqualTo("helloigotsomespaces");
+
+        final String withCapitalCase = "I GOT SoMe capital Cases";
+        assertThat(VigenereStringUtils.normalizePlainText(withCapitalCase)).isEqualTo("igotsomecapitalcases");
+
+        final String withSpecialChar = "There !! is 'ééâ some ) special* /- 133 char here";
+        assertThat(VigenereStringUtils.normalizePlainText(withSpecialChar)).isEqualTo("thereissomespecialcharhere");
+    }
 
     @Test
     public void shouldCountSingleCharRepetition() {

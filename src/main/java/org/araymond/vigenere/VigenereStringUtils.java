@@ -1,4 +1,4 @@
-package org.araymond.vigenere.cracker.friedman;
+package org.araymond.vigenere;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -7,7 +7,20 @@ import java.util.stream.Collectors;
 /**
  * Created by raymo on 26/11/2016.
  */
-public class FriedmanStringUtils {
+public class VigenereStringUtils {
+
+    /**
+     * Take a string as a parameter and :
+     *  - Remove spaces.
+     *  - Remove all non alphabetical charaters.
+     *  - Lowercase all characters.
+     *
+     * @param plaintText a String that may contains unwanted chars
+     * @return A String without all unwanted characters
+     */
+    public static String normalizePlainText(final String plaintText) {
+        return plaintText.replaceAll("[^A-Za-z]+", "").toLowerCase();
+    }
 
     /**
      * Count how much time each characters occurs.

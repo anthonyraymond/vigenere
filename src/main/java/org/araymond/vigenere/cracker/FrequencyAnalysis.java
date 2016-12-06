@@ -2,10 +2,9 @@ package org.araymond.vigenere.cracker;
 
 import com.google.common.collect.Maps;
 import org.araymond.vigenere.VigenereCipher;
-import org.araymond.vigenere.cracker.friedman.FriedmanStringUtils;
+import org.araymond.vigenere.VigenereStringUtils;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -18,7 +17,7 @@ import java.util.stream.IntStream;
  */
 public class FrequencyAnalysis {
 
-    private final FriedmanStringUtils utils = new FriedmanStringUtils();
+    private final VigenereStringUtils utils = new VigenereStringUtils();
     private final VigenereCipher vigenere = new VigenereCipher();
     private final BigDecimal hundred = new BigDecimal("100");
 
@@ -102,19 +101,21 @@ public class FrequencyAnalysis {
             }
         }
 
-
         return textFrequencies
                 .entrySet().stream()
-                // Turn character count into percentage (based on total amount of letters in text)
+                // Turn character count into their frequency (based on total amount of letters in text)
                 .map(entry -> {
-                    Double percentageOfText = text.length() > 0 ? entry.getValue() / (double) text.length() : 0;
-                    return Maps.immutableEntry(entry.getKey(), percentageOfText);
+                    final Double charFrequency = text.length() > 0 ? entry.getValue() / (double) text.length() : 0;
+                    return Maps.immutableEntry(entry.getKey(), charFrequency);
                 })
                 // Then calculate difference between english letters occurrence frequency and our frequency
                 .mapToDouble(entry -> {
-                    final Double difference = Math.abs(entry.getValue() - englishFrequency.get(entry.getKey()));
+                    final String character = entry.getKey();
+                    final Double frequency = entry.getValue();
+                    // Delta between english frequency and actual frequency
+                    final Double difference = Math.abs(frequency - englishFrequency.get(character));
                     // Add a weight to the return relative to the english frequency of the character.
-                    return difference / (1 + englishFrequency.get(entry.getKey()));
+                    return difference / (1 + englishFrequency.get(character));
                 })
                 .sum();
     }
