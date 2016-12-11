@@ -65,7 +65,7 @@ public class FrequencyAnalysis {
     Map.Entry<String, Double> findBestShiftToMatchEnglishFrequency(final String subText) {
         // For each characters in 'a' to 'z'
         return IntStream.rangeClosed(0, 25)
-                //We uncypher the text with vigenere and calculate the deviation from english letter frequency
+                //We uncypher the text with vigenere (with a key of length 1, so it's caesar) and calculate the deviation from english letter frequency
                 .mapToObj(i -> {
                     final String currentShift = Character.toString((char)('a' + i));
                     final String uncyphered = vigenere.uncypher(subText, currentShift);
