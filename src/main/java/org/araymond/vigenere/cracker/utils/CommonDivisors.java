@@ -24,12 +24,19 @@ public class CommonDivisors {
      * @return all common divisors between all matched positions (duplicated are kepts and returned).
      */
     public Stream<Integer> findFor(final List<Integer> values) {
+        // When there is only one value, we find divisors for this value only
         if (values.size() == 1) {
+            final int value = values.get(0);
             final Stream.Builder<Integer> builder = Stream.builder();
-            for (int i = 2; i <= values.get(0) / 2 && i <= maxDivisor.getLimit(); i++) {
-                if (values.get(0) % i == 0) {
+            // Try every divisors from 2 up to half of the value
+            for (int i = 2; i <= value / 2 && i <= maxDivisor.getLimit(); i++) {
+                if (value % i == 0) {
                     builder.add(i);
                 }
+            }
+            // finaly add the value itself, since the value is a divisor of itself
+            if (value <= maxDivisor.getLimit()) {
+                builder.add(value);
             }
             return builder.build();
         }
