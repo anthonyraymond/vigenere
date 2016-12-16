@@ -83,7 +83,7 @@ public class FrequencyAnalysis {
      * @param text
      * @return a value between 0 and 1 (0 means the text match the english's characters frequency perfectly).
      */
-    Double deviationFromEnglishLanguage(final String text) {
+    public Double deviationFromEnglishLanguage(final String text) {
         // Count how much time each character is repeated
         final Map<String, Long> textFrequencies = VigenereStringUtils.countRepetitionByCharacters(text);
 

@@ -42,9 +42,21 @@ public class BazeriesKeyExtractorTest {
     }
 
     @Test
-    public void shouldExtractCircularDependyEvenIfThereIsANestedRepetition() {
+    public void shouldExtractCircularDependencyEvenIfThereIsANestedRepetition() {
         final String str = "abczdfzga";
         assertThat(extractor.extractKeyFromCircularRepetitions(str)).hasValue("bczdfzga");
+    }
+
+    @Test
+    public void shouldExtractCircularDependencyIfRepeatMoreThanOneTime() {
+        final String str = "rsoursoursou";
+        assertThat(extractor.extractKeyFromCircularRepetitions(str)).hasValue("rsou");
+    }
+
+    @Test
+    public void shouldExtractCircularDependencyIfRepeatMoreThanOneTime2() {
+        final String str = "soursours";
+        assertThat(extractor.extractKeyFromCircularRepetitions(str)).hasValue("ours");
     }
 
 }
