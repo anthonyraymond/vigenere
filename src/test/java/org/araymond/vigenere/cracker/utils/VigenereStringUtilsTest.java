@@ -24,6 +24,9 @@ public class VigenereStringUtilsTest {
 
         final String withSpecialChar = "There !! is 'ééâ some ) special* /- 133 char here";
         assertThat(VigenereStringUtils.normalizePlainText(withSpecialChar)).isEqualTo("thereissomespecialcharhere");
+
+        final String withNewLines = "hello\n i got\r\nsome\r";
+        assertThat(VigenereStringUtils.normalizePlainText(withNewLines)).isEqualTo("helloigotsome");
     }
 
     @Test
