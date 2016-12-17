@@ -3,6 +3,7 @@ package org.araymond;
 import org.araymond.vigenere.VigenereCipher;
 import org.araymond.vigenere.cracker.KeyLength;
 import org.araymond.vigenere.cracker.KeyLengthEstimator;
+import org.araymond.vigenere.cracker.bazeries.BazeriesKeyFinder;
 import org.araymond.vigenere.cracker.frequency.FrequencyKeyBreaker;
 import org.araymond.vigenere.cracker.friedman.FriedmanKeyLengthEstimator;
 import org.araymond.vigenere.cracker.kasiski.KasikiKeyLengthEstimator;
@@ -26,6 +27,7 @@ public class App {
     private static final KeyLengthEstimator friedmanEstimator = new FriedmanKeyLengthEstimator();
     private static final FrequencyKeyBreaker frequencyKeyBreaker = new FrequencyKeyBreaker();
     private static final VigenereCipher vigenere = new VigenereCipher();
+    private static final BazeriesKeyFinder bazeries = new BazeriesKeyFinder();
 
     public static void main(final String[] args) {
         if (args.length < 1) {
@@ -49,7 +51,10 @@ public class App {
             case "frequency":
                 frequencyAnalysis(args);
                 break;
-            case "full":
+            case "bazeries":
+                bazeries(args);
+                break;
+            case "break":
                 fullBreak(args);
                 break;
             default:
@@ -59,13 +64,15 @@ public class App {
         System.exit(0);
     }
 
+
     private static void help() {
         out.println("Usage: " + System.getProperty("line.separator") +
                 "   - cypher <plaintText> <key>             : Encode a text using vigenere algorithm." + System.getProperty("line.separator") +
                 "   - uncypher <encodedText> <key>          : Decode a text using vigenere algorithm." + System.getProperty("line.separator") +
                 "   - estimate <encodedText>                : Estimate key lengths using Babbage and Kasiski method and Friendman test." + System.getProperty("line.separator") +
                 "   - frequency <keyLength> <encodedText>   : Break a key using frequency analysis." + System.getProperty("line.separator") +
-                "   - full <encodedText>                    : Take a cypher and try to find the key using kasiski and friendman, then frequency analysis. "
+                "   - bazeries <probableWord> <encodedText> : Try to find the key with a word that is supossed to be in the text." + System.getProperty("line.separator") +
+                "   - break <encodedText>                   : Take a cypher and try to find the key using kasiski and friendman, then frequency analysis. "
         );
     }
 
@@ -111,7 +118,7 @@ public class App {
 
     private static void frequencyAnalysis(final String[] args) {
         if (args.length != 3) {
-            err.println("Frequency analysis to break the key : frequency <keyLength>, <encodedText>");
+            err.println("Frequency analysis to break the key : frequency <keyLength> <encodedText>");
             System.exit(1);
         }
 
@@ -122,9 +129,26 @@ public class App {
         out.print("Key is: " + key);
     }
 
+
+    private static void bazeries(String[] args) {
+        if (args.length != 3) {
+            err.println("Perform a probable word attack : bazeries <probableWord> <encodedText>");
+            System.exit(1);
+        }
+
+        final String probableWord = VigenereStringUtils.normalizePlainText(args[1]);
+        final String encoded = VigenereStringUtils.normalizePlainText(args[2]);
+
+        final List<String> possibleKeys = bazeries.findPossibleKeys(encoded, probableWord);
+        if (possibleKeys.isEmpty()) {
+            out.println("No Keys were found");
+        }
+        possibleKeys.forEach(key -> out.println("     - " + key));
+    }
+
     private static void fullBreak(final String[] args) {
         if (args.length != 2) {
-            err.println("Estimating syntax syntax: full <encodedText>");
+            err.println("Estimating syntax syntax: break <encodedText>");
             System.exit(1);
         }
 
