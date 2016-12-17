@@ -1,8 +1,8 @@
 package org.araymond.vigenere.cracker.friedman;
 
-import org.araymond.vigenere.cracker.utils.VigenereStringUtils;
 import org.araymond.vigenere.cracker.KeyLength;
 import org.araymond.vigenere.cracker.KeyLengthEstimator;
+import org.araymond.vigenere.cracker.utils.VigenereStringUtils;
 
 import java.util.Collections;
 import java.util.List;

@@ -8,4 +8,5 @@ import java.util.List;
 public interface KeyLengthEstimator {
 
     List<KeyLength> estimate(final String encoded);
+
 }

@@ -1,4 +1,4 @@
-package org.araymond.vigenere.cracker.kasiki;
+package org.araymond.vigenere.cracker.kasiski;
 
 import org.araymond.vigenere.VigenereCipher;
 import org.araymond.vigenere.cracker.KeyLengthEstimator;

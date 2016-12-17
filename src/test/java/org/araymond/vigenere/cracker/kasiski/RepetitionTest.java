@@ -1,7 +1,5 @@
-package org.araymond.vigenere.cracker.kasiki;
+package org.araymond.vigenere.cracker.kasiski;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.junit.Test;
 
 import static com.google.common.collect.Lists.newArrayList;

@@ -1,4 +1,4 @@
-package org.araymond.vigenere.cracker.kasiki;
+package org.araymond.vigenere.cracker.kasiski;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -16,7 +16,7 @@ public class MultithreadedRepetitionCounter {
      * @throws ExecutionException Multithread error
      * @throws InterruptedException Multithread error
      */
-    public Collection<Repetition> count(final String fullText) throws ExecutionException, InterruptedException {
+    Collection<Repetition> count(final String fullText) throws ExecutionException, InterruptedException {
         // This is for multithreading.
         final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         final Collection<Future<Map<String, Repetition>>> futures = new ArrayList<>();

@@ -1,4 +1,4 @@
-package org.araymond.vigenere.cracker.kasiki;
+package org.araymond.vigenere.cracker.kasiski;
 
 import com.google.common.base.Objects;
 
@@ -20,12 +20,13 @@ public class Repetition {
 
         for (int i = 0; i < positions.size() - 1; ++i) {
             for (int j = i + 1; j < positions.size(); ++j) {
+                // compute distances from positions
                 distances.add(Math.abs(positions.get(j) - positions.get(i)));
             }
         }
     }
 
-    public List<Integer> getDistances() {
+    List<Integer> getDistances() {
         return Collections.unmodifiableList(this.distances);
     }
 

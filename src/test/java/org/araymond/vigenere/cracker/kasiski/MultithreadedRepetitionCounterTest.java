@@ -1,9 +1,10 @@
-package org.araymond.vigenere.cracker.kasiki;
+package org.araymond.vigenere.cracker.kasiski;
 
 import com.google.common.collect.Lists;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.Assertions.assertThat;

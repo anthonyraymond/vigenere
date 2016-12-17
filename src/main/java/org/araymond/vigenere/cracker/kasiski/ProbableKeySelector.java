@@ -1,9 +1,9 @@
-package org.araymond.vigenere.cracker.kasiki;
+package org.araymond.vigenere.cracker.kasiski;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import org.araymond.vigenere.cracker.KeyLength;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
@@ -14,23 +14,26 @@ import java.util.ListIterator;
 public class ProbableKeySelector {
 
     /**
-     * Assuming that "We are looking for the key with the bigger length, but with a descend number of occurrences" this
+     * Assuming that we are looking for the key with the bigger length, but with a descend number of occurrences. This
      * method evict some unlikely keys.
      *
      * @param probableKey
      * @return
      */
-    public List<KeyLength> removeUnlikelyKeys(final List<KeyLength> probableKey) {
+    List<KeyLength> removeUnlikelyKeys(final List<KeyLength> probableKey) {
         if (probableKey.size() < 2) {
             return probableKey;
         }
-        final List<KeyLength> mostProbableKeys = this.deduplicateDivisors(probableKey);
+        // We start by reducing factor redundancy
+        final List<KeyLength> mostProbableKeys = this.deduplicateDivisorsFactor(probableKey);
 
-        Collections.sort(mostProbableKeys, Comparator.comparingInt(KeyLength::getOccurrence).reversed());
+        mostProbableKeys.sort(Comparator.comparingInt(KeyLength::getOccurrence).reversed());
         final ListIterator<KeyLength> it = mostProbableKeys.listIterator();
         KeyLength current = it.next();
+        // for each probable key sorted by value DESC
         while (it.hasNext()) {
             final KeyLength next = it.next();
+            // if the next one is less than half of this one OR if the next one is less than third of the first one, we remove it from the probable keys
             if (next.getOccurrence() < current.getOccurrence() / 2 || next.getOccurrence() < mostProbableKeys.get(0).getOccurrence() / 3) {
                 it.remove();
                 it.previous();
@@ -61,10 +64,11 @@ public class ProbableKeySelector {
      * @param keyLengths
      * @return
      */
-    List<KeyLength> deduplicateDivisors(final List<KeyLength> keyLengths) {
+    @VisibleForTesting
+    List<KeyLength> deduplicateDivisorsFactor(final Iterable<KeyLength> keyLengths) {
         final List<KeyLength> mostProbableKeys = Lists.newArrayList();
         keyLengths.forEach(pk -> mostProbableKeys.add(new KeyLength(pk.getLength(), pk.getOccurrence())));
-        Collections.sort(mostProbableKeys, Comparator.comparingInt(KeyLength::getLength));
+        mostProbableKeys.sort(Comparator.comparingInt(KeyLength::getLength));
 
         for (int i = 0; i < mostProbableKeys.size(); ++i) {
             for (int j = i + 1; j < mostProbableKeys.size(); j++) {

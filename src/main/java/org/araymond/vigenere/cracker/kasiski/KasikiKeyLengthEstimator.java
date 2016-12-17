@@ -1,4 +1,4 @@
-package org.araymond.vigenere.cracker.kasiki;
+package org.araymond.vigenere.cracker.kasiski;
 
 import org.araymond.vigenere.cracker.KeyLength;
 import org.araymond.vigenere.cracker.KeyLengthEstimator;
@@ -18,7 +18,7 @@ public class KasikiKeyLengthEstimator implements KeyLengthEstimator {
     private final ProbableKeySelector selector = new ProbableKeySelector();
 
     /**
-     * Estimate the probable length of the key (based on common divisors of the distance between words) using kasiki method
+     * Estimate the probable length of the key (based on common divisors of the distance between words) using kasiski method
      *
      * @param encoded the encrypted text
      * @return A List of probable key length.

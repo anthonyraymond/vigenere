@@ -1,12 +1,12 @@
 package org.araymond;
 
 import org.araymond.vigenere.VigenereCipher;
-import org.araymond.vigenere.cracker.utils.VigenereStringUtils;
-import org.araymond.vigenere.cracker.frequency.FrequencyAnalysis;
 import org.araymond.vigenere.cracker.KeyLength;
 import org.araymond.vigenere.cracker.KeyLengthEstimator;
+import org.araymond.vigenere.cracker.frequency.FrequencyKeyBreaker;
 import org.araymond.vigenere.cracker.friedman.FriedmanKeyLengthEstimator;
-import org.araymond.vigenere.cracker.kasiki.KasikiKeyLengthEstimator;
+import org.araymond.vigenere.cracker.kasiski.KasikiKeyLengthEstimator;
+import org.araymond.vigenere.cracker.utils.VigenereStringUtils;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,7 +24,7 @@ public class App {
 
     private static final KeyLengthEstimator kasiskiEstimator = new KasikiKeyLengthEstimator();
     private static final KeyLengthEstimator friedmanEstimator = new FriedmanKeyLengthEstimator();
-    private static final FrequencyAnalysis frequencyAnalysis = new FrequencyAnalysis();
+    private static final FrequencyKeyBreaker frequencyKeyBreaker = new FrequencyKeyBreaker();
     private static final VigenereCipher vigenere = new VigenereCipher();
 
     public static void main(final String[] args) {
@@ -97,7 +97,7 @@ public class App {
         final String encoded = VigenereStringUtils.normalizePlainText(args[1]);
 
         out.println("Possibles key lengths are :");
-        out.println("    For Babbage and kasiki:");
+        out.println("    For Babbage and kasiski:");
         final List<KeyLength> kasiskiKeys = kasiskiEstimator.estimate(encoded);
         Collections.sort(kasiskiKeys, Comparator.comparingInt(KeyLength::getOccurrence).reversed());
         for (final KeyLength keyLength : kasiskiKeys) {
@@ -118,7 +118,7 @@ public class App {
         final String encoded = VigenereStringUtils.normalizePlainText(args[2]);
         final Integer keyLength = Integer.valueOf(args[1]);
 
-        final String key = frequencyAnalysis.breakKey(encoded, keyLength);
+        final String key = frequencyKeyBreaker.breakKey(encoded, keyLength);
         out.print("Key is: " + key);
     }
 
@@ -137,7 +137,7 @@ public class App {
         )
                 .map(KeyLength::getLength)
                 .collect(Collectors.toSet()).stream()
-                .map(length -> frequencyAnalysis.breakKey(encoded, length))
+                .map(length -> frequencyKeyBreaker.breakKey(encoded, length))
                 .collect(Collectors.toList());
 
         if (possibleKeys.isEmpty()) {

@@ -3,9 +3,6 @@ package org.araymond.vigenere.cracker.bazeries;
 import org.araymond.vigenere.VigenereCipher;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.function.Predicate;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
