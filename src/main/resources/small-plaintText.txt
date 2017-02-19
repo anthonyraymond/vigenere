@@ -1,0 +1,1 @@
+My name is Anthony, and i found that my vigenere algorithm works pretty well so far. I had not been able to find any text that it wasn't able to break through. I actually hope you wont find either, it would be a shame. All right, the text should now be long enought to pass the frequency analysis test.

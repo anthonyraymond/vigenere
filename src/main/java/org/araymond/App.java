@@ -9,6 +9,9 @@ import org.araymond.vigenere.cracker.friedman.FriedmanKeyLengthEstimator;
 import org.araymond.vigenere.cracker.kasiski.KasikiKeyLengthEstimator;
 import org.araymond.vigenere.cracker.utils.VigenereStringUtils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -70,8 +73,8 @@ public class App {
                 "   - cypher <plaintText> <key>             : Encode a text using vigenere algorithm." + System.getProperty("line.separator") +
                 "   - uncypher <encodedText> <key>          : Decode a text using vigenere algorithm." + System.getProperty("line.separator") +
                 "   - estimate <encodedText>                : Estimate key lengths using Babbage and Kasiski method and Friendman test." + System.getProperty("line.separator") +
-                "   - frequency <keyLength> <encodedText>   : Break a key using frequency analysis." + System.getProperty("line.separator") +
-                "   - bazeries <probableWord> <encodedText> : Try to find the key with a word that is supossed to be in the text." + System.getProperty("line.separator") +
+                "   - frequency <encodedText> <keyLength>   : Break a key using frequency analysis." + System.getProperty("line.separator") +
+                "   - bazeries <encodedText> <probableWord> : Try to find the key with a word that is supossed to be in the text." + System.getProperty("line.separator") +
                 "   - break <encodedText>                   : Take a cypher and try to find the key using kasiski and friendman, then frequency analysis. "
         );
     }
@@ -82,7 +85,8 @@ public class App {
             System.exit(1);
         }
 
-        out.println(vigenere.cypher(args[1], args[2]));
+        final String plainText = extractTextFromFile(args[1]);
+        out.println(vigenere.cypher(plainText, args[2]));
     }
 
     private static void uncyphering(final String[] args) {
@@ -91,7 +95,8 @@ public class App {
             System.exit(1);
         }
 
-        final String encoded = VigenereStringUtils.normalizePlainText(args[1]);
+        final String cypherString = extractTextFromFile(args[1]);
+        final String encoded = VigenereStringUtils.normalizePlainText(cypherString);
         out.println(vigenere.uncypher(encoded, args[2]));
     }
 
@@ -101,7 +106,8 @@ public class App {
             System.exit(1);
         }
 
-        final String encoded = VigenereStringUtils.normalizePlainText(args[1]);
+        final String cypherString = extractTextFromFile(args[1]);
+        final String encoded = VigenereStringUtils.normalizePlainText(cypherString);
 
         out.println("Possibles key lengths are :");
         out.println("    For Babbage and kasiski:");
@@ -118,26 +124,27 @@ public class App {
 
     private static void frequencyAnalysis(final String[] args) {
         if (args.length != 3) {
-            err.println("Frequency analysis to break the key : frequency <keyLength> <encodedText>");
+            err.println("Frequency analysis to break the key : frequency <encodedText> <keyLength>");
             System.exit(1);
         }
 
-        final String encoded = VigenereStringUtils.normalizePlainText(args[2]);
-        final Integer keyLength = Integer.valueOf(args[1]);
+        final String cypherString = extractTextFromFile(args[1]);
+        final String encoded = VigenereStringUtils.normalizePlainText(cypherString);
+        final Integer keyLength = Integer.valueOf(args[2]);
 
         final String key = frequencyKeyBreaker.breakKey(encoded, keyLength);
         out.print("Key is: " + key);
     }
 
-
-    private static void bazeries(String[] args) {
+    private static void bazeries(final String[] args) {
         if (args.length != 3) {
-            err.println("Perform a probable word attack : bazeries <probableWord> <encodedText>");
+            err.println("Perform a probable word attack : bazeries <encodedText> <probableWord>");
             System.exit(1);
         }
 
-        final String probableWord = VigenereStringUtils.normalizePlainText(args[1]);
-        final String encoded = VigenereStringUtils.normalizePlainText(args[2]);
+        final String cypherString = extractTextFromFile(args[1]);
+        final String encoded = VigenereStringUtils.normalizePlainText(cypherString);
+        final String probableWord = VigenereStringUtils.normalizePlainText(args[2]);
 
         final List<String> possibleKeys = bazeries.findPossibleKeys(encoded, probableWord);
         if (possibleKeys.isEmpty()) {
@@ -152,7 +159,8 @@ public class App {
             System.exit(1);
         }
 
-        final String encoded = VigenereStringUtils.normalizePlainText(args[1]);
+        final String cypherString = extractTextFromFile(args[1]);
+        final String encoded = VigenereStringUtils.normalizePlainText(cypherString);
 
         out.println("Possible keys can be :");
         final List<String> possibleKeys = Stream.concat(
@@ -168,8 +176,14 @@ public class App {
             out.println("No Keys were found");
         }
         possibleKeys.forEach(key -> out.println("     - " + key));
+    }
 
-
+    private static String extractTextFromFile(final String filename) {
+        try {
+            return new String(Files.readAllBytes(Paths.get(filename)));
+        } catch (final IOException e) {
+            throw new IllegalArgumentException("Cannot open file : " + filename, e);
+        }
     }
 
 }
